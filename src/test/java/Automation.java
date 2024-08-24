@@ -1,3 +1,5 @@
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.openqa.selenium.*;
@@ -6,16 +8,20 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import java.time.Duration;
 
 public class Automation {
+    private static WebDriver driver;
+
+    @BeforeAll
+    static void setUp() throws InterruptedException {
+        driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("https://ytuongsangtaohcm.vn/");
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        Thread.sleep(10000);
+    }
 
     @ParameterizedTest
     @MethodSource("ExcelUtils#excelDataProvider")
     void testSubmitIdeas(String topic, String idea, String summary) throws InterruptedException {
-        WebDriver driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("https://ytuongsangtaohcm.vn/");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
-        // Tương tác với các trường trên trang web
         WebElement authorField = driver.findElement(By.id("yt_tacgia"));
         authorField.sendKeys("Nguyen Ngoc Phuong Uyen");
 
@@ -25,7 +31,6 @@ public class Automation {
         WebElement phoneField = driver.findElement(By.id("yt_phone"));
         phoneField.sendKeys("0979635890");
 
-        // Điền dữ liệu từ Excel
         WebElement orgSelect = driver.findElement(By.cssSelector(".css-1hwfws3"));
         orgSelect.click();
         WebElement orgField = driver.findElement(By.id("react-select-2-input"));
@@ -45,15 +50,19 @@ public class Automation {
         WebElement submitButton = driver.findElement(By.cssSelector(".btn-success"));
         submitButton.click();
 
-        // Xử lý cảnh báo nếu có
         try {
             Alert alert = driver.switchTo().alert();
             alert.accept();
         } catch (NoAlertPresentException e) {
-            // Không có cảnh báo
         }
 
-        Thread.sleep(2000);
-        driver.quit();
+        Thread.sleep(3000);
+    }
+
+    @AfterAll
+    static void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }
