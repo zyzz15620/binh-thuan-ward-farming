@@ -25,9 +25,9 @@ public class ExcelUtils {
             }
 
             if (row != null) {
-                String topic = getCellValueAsString(row.getCell(0));  // Cột A (hoặc cột đầu tiên)
-                String idea = getCellValueAsString(row.getCell(1));   // Cột B (hoặc cột thứ hai)
-                String summary = getCellValueAsString(row.getCell(2)); // Cột C (hoặc cột thứ ba)
+                String topic = getCellValueAsString(row.getCell(0));
+                String idea = getCellValueAsString(row.getCell(1));
+                String summary = getCellValueAsString(row.getCell(2));
                 data.add(Arguments.of(topic, idea, summary));
             }
         }
