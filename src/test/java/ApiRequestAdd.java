@@ -3,11 +3,14 @@ import io.restassured.response.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 
 public class ApiRequestAdd {
-    @Test
-    public void sendAdd() {
+    @ParameterizedTest
+    @MethodSource("ExcelUtils#excelDataProvider")
+    public void sendAdd(String topic, String idea, String summary) {
         // setup URI
         RestAssured.baseURI = "https://api.ytuongsangtaohcm.vn";
 
@@ -17,14 +20,14 @@ public class ApiRequestAdd {
         company.put("label", "Đoàn phường Bình Thuận, Quận 7");
 
         JSONObject subject = new JSONObject();
-        subject.put("value", "5e69fafb9db1e45d80f6fcd9");
-        subject.put("label", "Giảm ô nhiễm môi trường");
+//        subject.put("value", "5e69fafb9db1e45d80f6fcd9"); //topic ID not needed
+        subject.put("label", topic); //topic
 
         JSONObject requestBody = new JSONObject();
         requestBody.put("yt_id_user", "");
         requestBody.put("yt_image", "");
-        requestBody.put("yt_ten", "quản lý rác thải");
-        requestBody.put("yt_tt", "tăng mức phạt xả rác bừa bãi, thêm luật");
+        requestBody.put("yt_ten", idea); //ten
+        requestBody.put("yt_tt", summary); //tt
         requestBody.put("yt_tacgia", "Nguyen Ngoc Phuong Uyen");
         requestBody.put("yt_email", "phuongbinhthuan.dtn@gmail.com");
         requestBody.put("yt_phone", "0979635890");
